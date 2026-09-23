@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            background: '#090d16',
+                            foreground: '#f8fafc',
+                            card: { DEFAULT: '#111827', foreground: '#f8fafc' },
+                            primary: { DEFAULT: '#00ff88', foreground: '#000000' },
+                            secondary: { DEFAULT: '#1e293b', foreground: '#f8fafc' },
+                            muted: { DEFAULT: '#64748b', foreground: '#94a3b8' },
+                            accent: { DEFAULT: '#334155', foreground: '#f8fafc' },
+                            border: '#1e293b'
+                        }
+                    }
+                }
+            }
+        </script>
+        <title>AspireFounder</title>
+    </head>
+    <body class="bg-background text-foreground font-sans antialiased overflow-x-hidden">
+        <div class="flex flex-col min-h-screen">
+            
+            <!-- Header / Navbar -->
+            <header class="sticky top-0 z-50 w-full transition-all duration-300 bg-background/90 backdrop-blur-md border-b border-border/40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <a class="flex items-center gap-1 group select-none" href="/">
+                            <svg viewBox="0 0 100 100" class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-105" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="gold-swoosh" x1="10" y1="70" x2="90" y2="20" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#B45309"></stop>
+                                        <stop offset="40%" stop-color="#D97706"></stop>
+                                        <stop offset="70%" stop-color="#F59E0B"></stop>
+                                        <stop offset="100%" stop-color="#FBBF24"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M 16 82 L 38 18 L 49 18 L 29 82 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 44 18 L 56 18 L 82 82 L 70 82 L 53 40 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 6 62 C 24 58, 48 46, 76 25 C 48 43, 24 52, 6 54 Z" fill="url(#gold-swoosh)"></path>
+                                <path d="M 68 31 L 88 12 L 81 37 L 74 27 Z" fill="url(#gold-swoosh)"></path>
+                            </svg>
+                            <div class="flex flex-col justify-center -ml-1">
+                                <span class="font-headline text-2xl sm:text-3xl font-bold tracking-tight text-foreground leading-none">
+                                    <span class="text-foreground">spire</span>
+                                </span>
+                                <span class="font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.3em] text-muted-foreground uppercase leading-none mt-1 pl-[2px]">FOUNDER</span>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <nav class="hidden md:flex flex-1 justify-center items-center gap-6 lg:gap-8">
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="#courses">Courses</a>
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="#features">Features</a>
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="#testimonials">Success Stories</a>
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/about/">About</a>
+                    </nav>
+
+                    <!-- Exact Navbar Button Styles from Screenshot -->
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <a href="/admin" class="hidden sm:inline-block bg-accent hover:bg-accent/80 text-foreground text-xs font-semibold px-3 py-2 rounded-lg border border-border transition">Admin</a>
+                        <a href="/login" class="border border-primary text-primary hover:bg-primary/10 font-bold text-xs sm:text-sm px-5 py-2 rounded-full transition">Login</a>
+                        <a href="/login" class="bg-primary text-primary-foreground font-bold text-xs sm:text-sm px-5 py-2 rounded-full shadow-lg hover:bg-primary/90 transition">Sign Up</a>
+                        
+                        <button id="menu-btn" class="md:hidden p-2 rounded-lg bg-accent/50 text-foreground focus:outline-none" aria-label="Toggle Menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="mobile-menu" class="hidden md:hidden bg-card border-b border-border px-4 pt-2 pb-4 space-y-3">
+                    <a href="#courses" class="block text-sm font-medium text-muted-foreground hover:text-primary py-1">Courses</a>
+                    <a href="#features" class="block text-sm font-medium text-muted-foreground hover:text-primary py-1">Features</a>
+                    <a href="#testimonials" class="block text-sm font-medium text-muted-foreground hover:text-primary py-1">Success Stories</a>
+                    <a href="/about/" class="block text-sm font-medium text-muted-foreground hover:text-primary py-1">About</a>
+                </div>
+            </header>
+
+            <main class="flex-1">
+                
+                <!-- 1. HERO SECTION -->
+                <section class="hero relative min-h-[85vh] flex items-center py-12 sm:py-20" id="home">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                        <div class="hero-content grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                            <div class="hero-text text-center lg:text-left">
+                                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-headline mb-5 leading-tight tracking-tight">
+                                    <span class="text-white">Decode your <span class="text-primary">future</span>.</span><br/>
+                                    <span class="text-white">{{ hero.title_line_2|default:"Learn, Certify, Get Hired." }}</span>
+                                </h1>
+                                <p class="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
+                                    {{ hero.subtitle }}
+                                </p>
+                                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                                    <a class="bg-primary text-primary-foreground font-bold h-12 px-8 rounded-xl text-base flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition" href="#courses">Start Learning Now</a>
+                                    <a target="_blank" class="border border-primary bg-transparent text-primary hover:bg-primary/10 h-12 px-8 rounded-xl text-base flex items-center justify-center transition" href="https://www.youtube.com/@aspirefounder">Watch Demo</a>
+                                </div>
+                                
+                                <div class="hero-stats grid grid-cols-3 gap-4 sm:gap-8 mt-12 pt-8 border-t border-border/40 max-w-lg mx-auto lg:mx-0">
+                                    <div class="text-center lg:text-left">
+                                        <div class="text-2xl sm:text-3xl font-bold text-primary">{{ hero.students_count }}</div>
+                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1">Students</div>
+                                    </div>
+                                    <div class="text-center lg:text-left">
+                                        <div class="text-2xl sm:text-3xl font-bold text-primary">{{ hero.placement_rate }}</div>
+                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1">Placement Rate</div>
+                                    </div>
+                                    <div class="text-center lg:text-left">
+                                        <div class="text-2xl sm:text-3xl font-bold text-primary">{{ hero.content_hours }}</div>
+                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1">Hours Content</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hero-visual flex justify-center items-center w-full">
+                                <div class="bg-card border border-border/80 shadow-2xl rounded-2xl w-full max-w-md p-6 sm:p-8 relative overflow-hidden">
+                                    <h3 class="text-primary font-bold text-lg sm:text-xl mb-4 font-headline mt-2">{{ hero_card.title|default:"Medical Coding Foundation Program" }}</h3>
+                                    <ul class="space-y-2.5 mb-6 text-muted-foreground text-xs sm:text-sm">
+                                        <li class="flex items-center gap-2">✓ Medical Terminology & Human Anatomy</li>
+                                        <li class="flex items-center gap-2">✓ Introduction to ICD-10-CM</li>
+                                        <li class="flex items-center gap-2">✓ Basics of CPT and HCPCS</li>
+                                        <li class="flex items-center gap-2">✓ Overview of US Healthcare & RCM</li>
+                                        <li class="flex items-center gap-2">✓ HIPAA, Compliance & Claim Lifecycle</li>
+                                    </ul>
+                                    <div class="space-y-1 pt-4 border-t border-border/50">
+                                        <div class="text-2xl sm:text-3xl font-bold text-primary font-headline">
+                                            ₹{{ hero_card.price|default:"12,999" }} <span class="text-xs sm:text-sm text-muted-foreground line-through ml-2">₹{{ hero_card.original_price|default:"30,000" }}</span>
+                                        </div>
+                                        <p class="text-xs text-muted-foreground">+ GST</p>
+                                    </div>
+                                    <div class="mt-5">
+                                        <a href="{{ hero_card.button_url|default:'/login' }}" class="bg-primary text-primary-foreground font-bold h-12 rounded-xl text-base w-full flex items-center justify-center shadow-md hover:bg-primary/90 transition">{{ hero_card.button_text|default:"Enroll Now" }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. WHY LEARN WITH US -->
+                <section class="why-us py-16 sm:py-24 bg-card/30 border-y border-border/40" id="features">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="section-header text-center mb-12 sm:mb-16">
+                            <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-4">Why Learn With Us?</h2>
+                            <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">Structured, practical, and career-focused training designed for your success.</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                            {% for feature in features %}
+                            <div class="rounded-xl border bg-card/50 border-border/50 text-center p-6 sm:p-8 hover:-translate-y-1 transition-transform duration-300">
+                                <div class="bg-primary/10 text-primary w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-xl sm:text-2xl">{{ feature.icon_emoji }}</div>
+                                <h3 class="text-lg sm:text-xl font-bold font-headline mb-3">{{ feature.title }}</h3>
+                                <p class="text-muted-foreground text-xs sm:text-sm leading-relaxed">{{ feature.description }}</p>
+                            </div>
+                            {% empty %}
+                            <p class="text-center text-muted-foreground col-span-4">No features added yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. GET FREE ACCESS TO PREMIUM RESOURCES -->
+                <section class="free-offerings py-16 sm:py-24 bg-background">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="section-header text-center mb-12 sm:mb-16">
+                            <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-4">Get Free Access to Premium Resources</h2>
+                            <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">Sign up today and kickstart your medical coding journey with these valuable resources, absolutely free.</p>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                            {% for res in resources %}
+                            <div class="rounded-xl border text-card-foreground shadow-sm offering-card text-center p-6 bg-card/50 border-border/50 hover:-translate-y-1 transition-transform duration-300 flex flex-col items-center justify-center">
+                                <div class="offering-icon bg-primary/10 text-primary w-14 h-14 rounded-full flex items-center justify-center mb-4">⭐</div>
+                                <h3 class="text-sm sm:text-base font-semibold">{{ res.title }}</h3>
+                            </div>
+                            {% empty %}
+                            <p class="text-center text-muted-foreground col-span-4">No resources added yet.</p>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-12">
+                            <a class="bg-primary text-primary-foreground font-bold h-12 px-8 rounded-xl text-base inline-flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition" href="/login">Sign Up For Free</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. OUR COURSES -->
+                <section class="courses py-16 sm:py-24 bg-card/30 border-y border-border/40" id="courses">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="section-header text-center mb-12 sm:mb-16">
+                            <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-4">Our Courses</h2>
+                            <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">Industry-focused programs designed to make you job-ready</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                            {% for course in courses %}
+                            <div class="border text-card-foreground shadow-sm h-full flex flex-col overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 border-border/50 bg-[#0d1322] rounded-2xl">
+                                
+                                <!-- Clickable Header & Top Badges -->
+                                <div class="p-5 relative bg-[#111827]/70 flex-grow">
+                                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                                        <div class="inline-flex items-center rounded-full px-3 py-1 text-[11px] sm:text-xs font-bold text-black bg-[#00ff88]">
+                                            {{ course.badge_text }}
+                                        </div>
+                                        {% if course.status_badge %}
+                                        <div class="inline-flex items-center rounded-full px-3 py-1 text-[11px] sm:text-xs font-semibold bg-[#1f293d] text-slate-300">
+                                            {{ course.status_badge }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <a href="{% url 'course_detail' course.slug %}" class="block group">
+                                        <h3 class="font-bold tracking-tight text-xl font-headline text-white mt-2 group-hover:text-primary transition">{{ course.title }}</h3>
+                                        <p class="text-xs text-muted-foreground mt-1">{{ course.subtitle }}</p>
+                                    </a>
+                                </div>
+
+                                <!-- Instructor & Ratings Section -->
+                                <div class="p-5 space-y-4">
+                                    <div class="flex items-center gap-2 text-sm text-slate-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg>
+                                        <span>By {{ course.instructor }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm text-muted-foreground">
+                                        <div class="flex items-center gap-1.5 text-amber-400 font-bold text-xs sm:text-sm">
+                                            <span>⭐ {{ course.rating }}</span>
+                                            <span class="text-[11px] sm:text-xs text-muted-foreground font-normal">({{ course.reviews_count }} reviews)</span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 text-xs text-slate-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                            <span>{{ course.students_count }} students</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card Footer (Price & Action Button with Hover Glow/Zoom & Popup Toast) -->
+                                <div class="p-5 flex flex-col items-start gap-4 border-t border-border/40 bg-[#111827]/40 mt-auto">
+                                    <div class="w-full flex justify-between items-center">
+                                        <div class="flex flex-col">
+                                            <div class="flex items-baseline gap-2">
+                                                <p class="text-xl font-extrabold font-headline text-primary">₹{{ course.price }}</p>
+                                                <p class="text-xs sm:text-sm text-muted-foreground line-through">₹{{ course.original_price }}</p>
+                                            </div>
+                                            <p class="text-[10px] text-muted-foreground mt-0.5">+ GST {% if course.exam_fees %}+ {{ course.exam_fees }}{% endif %}</p>
+                                        </div>
+                                        
+                                        {% if "Notify" in course.button_text %}
+                                        <!-- Notify Me Button with popup trigger and hover zoom/glow -->
+                                        <button onclick="showNotifyToast('{{ course.title }}')" class="notify-btn inline-flex items-center justify-center text-xs sm:text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] bg-white text-slate-900 hover:bg-slate-100 h-10 rounded-xl px-5 shadow">
+                                            {{ course.button_text }}
+                                        </button>
+                                        {% else %}
+                                        <!-- Enroll Now Button with hover zoom and neon glow -->
+                                        <a href="{{ course.button_url }}" class="inline-flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_25px_rgba(0,255,136,0.6)] bg-primary text-black hover:bg-primary/90 h-10 rounded-xl px-5 shadow-md shadow-primary/30">
+                                            {{ course.button_text }}
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% empty %}
+                            <div class="col-span-3 text-center py-12 text-muted-foreground">
+                                <p>No courses found. Add courses via the Admin Panel.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Toast Notification Popup Container -->
+                <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col space-y-2 pointer-events-none"></div>
+
+                <!-- Toast Notification Script -->
+                <script>
+                    function showNotifyToast(courseName) {
+                        const container = document.getElementById('toast-container');
+                        
+                        const toast = document.createElement('div');
+                        toast.className = "pointer-events-auto bg-[#111827] border border-slate-700 text-slate-100 px-5 py-4 rounded-xl shadow-2xl transition-all duration-300 transform translate-y-5 opacity-0 flex flex-col space-y-1 min-w-[280px]";
+                        
+                        toast.innerHTML = `
+                            <div class="font-bold text-sm text-white">You're on the list!</div>
+                            <div class="text-xs text-slate-400">We'll notify you when "${courseName}" is launched.</div>
+                        `;
+                        
+                        container.appendChild(toast);
+                        
+                        // Fade in & Slide up
+                        setTimeout(() => {
+                            toast.classList.remove('translate-y-5', 'opacity-0');
+                        }, 50);
+                        
+                        // Remove after 4 seconds
+                        setTimeout(() => {
+                            toast.classList.add('translate-y-5', 'opacity-0');
+                            setTimeout(() => {
+                                toast.remove();
+                            }, 300);
+                        }, 4000);
+                    }
+                </script>
+
+                <!-- 5. SUCCESS STORIES (Centered Header & Outer Edge Navigation Arrows) -->
+                <section class="testimonials py-16 sm:py-24 bg-background overflow-hidden" id="testimonials">
+                    <!-- Centered Header -->
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 text-center">
+                        <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-3">Success Stories</h2>
+                        <p class="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">Hear from students who transformed their careers with us</p>
+                    </div>
+                    
+                    <!-- Carousel Container with Edge Arrows -->
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                        
+                        <!-- Left Arrow (Absolute on Far Left Edge) -->
+                        <button onclick="scrollTestimonials('left')" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 sm:-ml-5 z-20 p-3 rounded-full border border-border/80 bg-card/90 text-foreground hover:bg-primary hover:text-black hover:border-primary shadow-xl transition-all duration-300 focus:outline-none hidden sm:flex items-center justify-center" aria-label="Scroll Left">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        </button>
+
+                        <!-- Scrollable Horizontal Container -->
+                        <div id="testimonial-container" class="flex overflow-x-auto space-x-6 pb-6 pt-2 px-2 no-scrollbar snap-x snap-mandatory scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
+                            {% for story in stories %}
+                            <div class="border text-card-foreground shadow-sm testimonial-card p-8 bg-card/50 border-border/50 relative rounded-2xl flex flex-col flex-shrink-0 w-[350px] sm:w-[400px] snap-start">
+                                
+                                <!-- Card Header: Avatar, Name, and Dynamic Stars -->
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 bg-accent flex-shrink-0">
+                                            {% if story.image %}
+                                            <img alt="{{ story.student_name }}" class="object-cover w-full h-full" src="{{ story.image.url }}">
+                                            {% else %}
+                                            <img alt="{{ story.student_name }}" class="object-cover w-full h-full" src="https://picsum.photos/seed/{{ story.student_name|slugify }}/80/80">
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold font-headline text-lg text-white">{{ story.student_name }}</h4>
+                                            <!-- Dynamic Star Rating Loop -->
+                                            <div class="flex items-center gap-1 mt-1">
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= story.rating_stars %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-3.5 h-3.5 text-primary">
+                                                        <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
+                                                    </svg>
+                                                    {% else %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-3.5 h-3.5 text-slate-700">
+                                                        <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
+                                                    </svg>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-6xl font-serif text-primary opacity-10 leading-none select-none">“</p>
+                                </div>
+                                
+                                <!-- Quote Content -->
+                                <div class="p-0 z-10 relative flex-grow mb-6">
+                                    <p class="testimonial-text text-muted-foreground italic text-sm sm:text-base">"{{ story.quote }}"</p>
+                                </div>
+                                
+                                <!-- Card Footer: Designation & Location -->
+                                <div class="testimonial-footer pt-6 border-t border-border/50 mt-auto">
+                                    <p class="text-sm font-semibold text-foreground mb-1">{{ story.designation }}</p>
+                                    <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3 text-primary">
+                                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        <span>{{ story.location }}</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% empty %}
+                            <div class="w-full text-center py-12 text-muted-foreground">
+                                <p>No success stories found. Add them via the Admin Panel.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Right Arrow (Absolute on Far Right Edge) -->
+                        <button onclick="scrollTestimonials('right')" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 sm:-mr-5 z-20 p-3 rounded-full border border-border/80 bg-card/90 text-foreground hover:bg-primary hover:text-black hover:border-primary shadow-xl transition-all duration-300 focus:outline-none hidden sm:flex items-center justify-center" aria-label="Scroll Right">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+
+                    </div>
+                </section>
+
+                <!-- JavaScript for Horizontal Scroll Buttons -->
+                <script>
+                    function scrollTestimonials(direction) {
+                        const container = document.getElementById('testimonial-container');
+                        const scrollAmount = 420; // Scroll width of one card + gap
+                        if (direction === 'left') {
+                            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                        } else {
+                            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                        }
+                    }
+                </script>
+
+                <!-- 6. FAQ SECTION -->
+                <section class="faq py-16 sm:py-24 bg-card/30 border-y border-border/40" id="faq">
+                    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="section-header text-center mb-12 sm:mb-16">
+                            <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-4">Frequently Asked Questions</h2>
+                            <p class="text-base sm:text-lg text-muted-foreground">Have questions? We've got answers.</p>
+                        </div>
+                        <div class="space-y-4">
+                            {% for faq in faqs %}
+                            <details class="border-b border-border/60 pb-4 group">
+                                <summary class="flex justify-between items-center font-medium cursor-pointer text-base sm:text-lg text-foreground py-2">
+                                    {{ faq.question }}
+                                    <span class="transition-transform group-open:rotate-180 ml-2">⌄</span>
+                                </summary>
+                                <p class="text-muted-foreground text-xs sm:text-sm mt-2 leading-relaxed">{{ faq.answer }}</p>
+                            </details>
+                            {% empty %}
+                            <p class="text-center text-muted-foreground">No FAQs added yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Footer -->
+            <footer class="border-t border-border/50 bg-background">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-6 py-10 md:h-24 md:flex-row md:py-0 text-center md:text-left">
+                    <div class="flex flex-col items-center gap-4 md:flex-row md:gap-6">
+                        <a class="flex items-center gap-1 group select-none" href="/">
+                            <svg viewBox="0 0 100 100" class="w-8 h-8 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 16 82 L 38 18 L 49 18 L 29 82 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 44 18 L 56 18 L 82 82 L 70 82 L 53 40 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 6 62 C 24 58, 48 46, 76 25 C 48 43, 24 52, 6 54 Z" fill="url(#gold-swoosh)"></path>
+                            </svg>
+                            <span class="font-bold tracking-tight text-lg text-foreground ml-1">spireFOUNDER</span>
+                        </a>
+                        <div class="flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
+                            <a class="hover:text-foreground transition" href="#">Terms and Conditions</a>
+                            <a class="hover:text-foreground transition" href="#">Privacy policy</a>
+                            <a class="hover:text-foreground transition" href="#">Refund policy</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-muted-foreground text-sm">
+                        <a href="https://www.youtube.com/@aspirefounder" target="_blank" class="hover:text-foreground transition">YouTube</a>
+                        <a href="https://www.instagram.com/aspirefounder1" target="_blank" class="hover:text-foreground transition">Instagram</a>
+                        <a href="https://www.linkedin.com/company/aspirefounder/" target="_blank" class="hover:text-foreground transition">LinkedIn</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <script>
+            const btn = document.getElementById('menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => { menu.classList.toggle('hidden'); });
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => { menu.classList.add('hidden'); });
+            });
+        </script>
+    </body>
+</html>
