@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            background: '#090d16',
+                            foreground: '#f8fafc',
+                            card: { DEFAULT: '#111827', foreground: '#f8fafc' },
+                            primary: { DEFAULT: '#00ff88', foreground: '#000000' },
+                            secondary: { DEFAULT: '#1e293b', foreground: '#f8fafc' },
+                            muted: { DEFAULT: '#64748b', foreground: '#94a3b8' },
+                            accent: { DEFAULT: '#334155', foreground: '#f8fafc' },
+                            border: '#1e293b'
+                        }
+                    }
+                }
+            }
+        </script>
+        <title>{% block title %}AspireFounder{% endblock %}</title>
+    </head>
+    <body class="bg-background text-foreground font-sans antialiased">
+        <div class="flex flex-col min-h-screen">
+            
+            <!-- Global Navbar -->
+            <header class="sticky top-0 z-50 w-full transition-all duration-300 bg-background/90 backdrop-blur-md border-b border-border/40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <a class="flex items-center gap-2 group select-none" href="/">
+                            {% if about_content.logo %}
+                            <!-- Dynamic Logo from Admin Panel -->
+                            <img src="{{ about_content.logo.url }}" alt="AspireFounder Logo" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                            {% else %}
+                            <!-- Fallback Logo SVG -->
+                            <svg viewBox="0 0 100 100" class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="gold-swoosh" x1="10" y1="70" x2="90" y2="20" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#B45309"></stop>
+                                        <stop offset="40%" stop-color="#D97706"></stop>
+                                        <stop offset="70%" stop-color="#F59E0B"></stop>
+                                        <stop offset="100%" stop-color="#FBBF24"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M 16 82 L 38 18 L 49 18 L 29 82 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 44 18 L 56 18 L 82 82 L 70 82 L 53 40 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 6 62 C 24 58, 48 46, 76 25 C 48 43, 24 52, 6 54 Z" fill="url(#gold-swoosh)"></path>
+                                <path d="M 68 31 L 88 12 L 81 37 L 74 27 Z" fill="url(#gold-swoosh)"></path>
+                            </svg>
+                            <div class="flex flex-col justify-center -ml-1">
+                                <span class="font-headline text-2xl sm:text-3xl font-bold tracking-tight text-foreground leading-none">
+                                    <span class="text-foreground">spire</span>
+                                </span>
+                                <span class="font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.3em] text-muted-foreground uppercase leading-none mt-1 pl-[2px]">FOUNDER</span>
+                            </div>
+                            {% endif %}
+                        </a>
+                    </div>
+                    
+                    <nav class="hidden md:flex flex-1 justify-center items-center gap-6 lg:gap-8">
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/#courses">Courses</a>
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/#features">Features</a>
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/#testimonials">Success Stories</a>
+                        <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/about/">About</a>
+                    </nav>
+
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <a href="/admin" class="hidden sm:inline-block bg-accent hover:bg-accent/80 text-foreground text-xs font-semibold px-3 py-2 rounded-lg border border-border transition">Admin</a>
+                        <!-- <a href="/login" class="border border-primary text-primary hover:bg-primary/10 font-bold text-xs sm:text-sm px-5 py-2 rounded-full transition">Login</a>
+                        <a href="/login" class="bg-primary text-primary-foreground font-bold text-xs sm:text-sm px-5 py-2 rounded-full shadow-lg hover:bg-primary/90 transition">Sign Up</a> -->
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Dynamic Content Block -->
+            <main class="flex-1">
+                {% block content %}
+                <!-- Child templates will inject content here -->
+                {% endblock %}
+            </main>
+
+            <!-- Global Footer -->
+            <footer class="border-t border-border/50 bg-background mt-auto">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-6 py-10 md:h-24 md:flex-row md:py-0 text-center md:text-left">
+                    <div class="flex flex-col items-center gap-4 md:flex-row md:gap-6">
+                        <a class="flex items-center gap-2 group select-none" href="/">
+                            {% if about_content.logo %}
+                            <img src="{{ about_content.logo.url }}" alt="AspireFounder Logo" class="h-8 w-auto object-contain">
+                            {% else %}
+                            <svg viewBox="0 0 100 100" class="w-8 h-8 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 16 82 L 38 18 L 49 18 L 29 82 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 44 18 L 56 18 L 82 82 L 70 82 L 53 40 Z" fill="currentColor" class="text-foreground"></path>
+                                <path d="M 6 62 C 24 58, 48 46, 76 25 C 48 43, 24 52, 6 54 Z" fill="url(#gold-swoosh)"></path>
+                            </svg>
+                            <span class="font-bold tracking-tight text-lg text-foreground ml-1">spireFOUNDER</span>
+                          {% endif %}
+                        </a>
+                        <div class="flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
+                            <a class="hover:text-foreground transition" href="#">Terms and Conditions</a>
+                            <a class="hover:text-foreground transition" href="#">Privacy policy</a>
+                            <a class="hover:text-foreground transition" href="#">Refund policy</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-muted-foreground text-sm">
+                        <a href="https://www.youtube.com/@aspirefounder" target="_blank" class="hover:text-foreground transition">YouTube</a>
+                        <a href="https://www.instagram.com/aspirefounder1" target="_blank" class="hover:text-foreground transition">Instagram</a>
+                        <a href="https://www.linkedin.com/company/aspirefounder/" target="_blank" class="hover:text-foreground transition">LinkedIn</a>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </body>
+</html>

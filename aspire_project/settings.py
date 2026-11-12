@@ -25,13 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ac8i5$(6ypjnssc=q4tfihh8%36tjhq&j-p=zo1*&d$^4qdbse'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
 ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
-
 INSTALLED_APPS = [
+    'unfold',  # Modern Tailwind admin theme
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Add this line
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,6 +65,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # --- Add your custom context processor here ---
+                'courses.context_processors.site_branding',
             ],
         },
     },
@@ -73,25 +76,15 @@ WSGI_APPLICATION = 'aspire_project.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default=os.environ.get('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
         conn_max_age=600
     )
 }
 
 
 # Password validation
-# https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -109,35 +102,113 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/6.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.1/howto/static-files/
-
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles' # This line was missing or misconfigured
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# ---> ADD THIS LINE SO DJANGO FINDS YOUR ROOT STATIC FOLDER <---
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
+if DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
 # Media files configuration for uploads
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# Email Configuration (Real SMTP Backend)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sachidanandapatro93@gmail.com'          # Replace with your actual Gmail address
+EMAIL_HOST_PASSWORD = 'zutr ekcs xgzk rxal'   # Replace with your Google App Password
+DEFAULT_FROM_EMAIL = 'AspireFounder Support <sachidanandapatro93@gmail.com>'
+
+
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
+UNFOLD = {
+    "SITE_TITLE": "AspireFounder Admin",
+    "SITE_HEADER": "AspireFounder Control Center",
+    "SITE_URL": "/",
+    
+    # Direct string path or dictionary format supported by Unfold for logo rendering
+    "SITE_LOGO": "images/logo.jpeg", 
+    
+    # Optional: If you want to use a specific logo image for dark mode vs light mode:
+    # "SITE_LOGO": {
+    #     "light": "images/logo.jpeg",
+    #     "dark": "images/logo.jpeg",
+    # },
+
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True, 
+        "navigation": [
+            {
+                "title": _("Core Management"),
+                "items": [
+                    {
+                        "title": _("Dashboard"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                    {
+                        "title": _("Courses"),
+                        "icon": "school",
+                        "link": reverse_lazy("admin:courses_course_changelist"),
+                    },
+                    {
+                        "title": _("Enrollments"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:courses_enrollment_changelist"),
+                    },
+                    {
+                        "title": _("Payment Settings"),
+                        "icon": "payments",
+                        "link": reverse_lazy("admin:courses_paymentsetting_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
+    "STYLES": [
+        lambda request: """
+        <style>
+            /* Force all inputs, select dropdowns, and textareas to look crisp with distinct borders */
+            input[type="text"], input[type="date"], input[type="email"], input[type="number"], input[type="password"], select, textarea {
+                border: 1px solid #475569 !important;
+                background-color: #1e293b !important;
+                color: #f8fafc !important;
+                border-radius: 0.375rem !important;
+                padding: 0.5rem 0.75rem !important;
+            }
+            
+            /* Fix dropdown option lists so text is dark and readable when opened */
+            select option {
+                background-color: #ffffff !important;
+                color: #0f172a !important;
+                padding: 0.5rem !important;
+            }
+
+            input:focus, select:focus, textarea:focus {
+                border-color: #00ff88 !important;
+                box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.25) !important;
+            }
+        </style>
+        """,
+    ],
+}

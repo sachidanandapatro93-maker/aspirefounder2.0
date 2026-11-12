@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - {{ course_name }} - AspireFounder{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="bg-card border border-border/80 shadow-2xl rounded-2xl p-6 sm:p-10">
+        
+        <!-- Heading -->
+        <div class="border-b border-border/60 pb-6 mb-8">
+            <h1 class="text-2xl sm:text-3xl font-extrabold font-headline text-white mb-2">Complete Your Enrollment</h1>
+            <p class="text-sm text-muted-foreground">Course: <span class="text-primary font-semibold">{{ course_name }}</span></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            
+            <!-- Left: Dynamic Payment Info (UPI QR or Direct Bank Transfer) -->
+            <div class="bg-background/50 border border-border/60 p-6 rounded-xl flex flex-col items-center text-center space-y-4">
+                {% if payment_settings.active_method == 'bank' %}
+                    <!-- Direct Bank Transfer View -->
+                    <div class="w-full space-y-4">
+                        {% if payment_settings.bank_logo %}
+                        <div class="bg-white p-2 rounded-xl inline-block mx-auto">
+                            <img src="{{ payment_settings.bank_logo.url }}" alt="Bank Logo" class="w-32 h-16 object-contain">
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-1">Direct Bank Transfer</h3>
+                            <p class="text-xs text-muted-foreground">{{ payment_settings.bank_name }}</p>
+                        </div>
+                        <div class="space-y-2 text-left text-xs text-slate-300 bg-card/60 p-4 rounded-xl border border-border/40">
+                            <div class="flex justify-between py-1 border-b border-border/40">
+                                <span class="text-muted-foreground">Account Name:</span>
+                                <span class="font-semibold text-white">{{ payment_settings.bank_account_name }}</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-border/40">
+                                <span class="text-muted-foreground">Account Number:</span>
+                                <span class="font-semibold text-white">{{ payment_settings.bank_account_number }}</span>
+                            </div>
+                            <div class="flex justify-between py-1">
+                                <span class="text-muted-foreground">IFSC Code:</span>
+                                <span class="font-semibold text-white">{{ payment_settings.bank_ifsc }}</span>
+                            </div>
+                        </div>
+                        <div class="text-left w-full pt-3 border-t border-border/40 space-y-1 text-xs text-muted-foreground">
+                            <p class="font-semibold text-white mb-1">Steps to pay:</p>
+                            <p>1. Transfer <strong class="text-primary">₹{{ course_price }}</strong> to the bank account above.</p>
+                            <p>2. Keep your transaction reference number handy (Optional).</p>
+                            <p>3. Enter your details and submit below.</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- UPI QR Code View -->
+                    <div class="bg-white p-3 rounded-xl shadow-lg">
+                        {% if payment_settings.qr_code_image %}
+                        <img src="{{ payment_settings.qr_code_image.url }}" alt="UPI QR Code" class="w-40 h-40 object-contain">
+                        {% else %}
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa={{ payment_settings.upi_id }}&pn={{ payment_settings.upi_name }}&am={{ course_price }}&cu=INR" alt="UPI QR Code" class="w-40 h-40 object-contain">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted-foreground mb-1">Scan using Google Pay, PhonePe, Paytm</p>
+                        <div class="inline-block bg-accent/60 border border-border px-3 py-1 rounded-full text-xs text-primary font-mono font-semibold">
+                            UPI ID: {{ payment_settings.upi_id }}
+                        </div>
+                    </div>
+                    <div class="text-left w-full pt-3 border-t border-border/40 space-y-1 text-xs text-muted-foreground">
+                        <p class="font-semibold text-white mb-1">Steps to pay:</p>
+                        <p>1. Scan QR code and complete <strong class="text-primary">₹{{ course_price }}</strong> payment.</p>
+                        <p>2. Copy the 12-digit UTR / Transaction Reference number (Optional).</p>
+                        <p>3. Enter your details and submit below.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Right: Student Details & Form -->
+            <div>
+                <div class="mb-6">
+                    <div class="text-2xl font-extrabold text-white font-headline">
+                        ₹{{ course_price }} <span class="text-xs font-normal text-muted-foreground">+ GST</span>
+                    </div>
+                </div>
+
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    
+                    <!-- Form Error Display -->
+                    {% if form.errors %}
+                    <div class="bg-red-500/10 border border-red-500/40 text-red-400 p-3 rounded-xl text-xs space-y-1">
+                        <p class="font-bold">Please fix the errors below:</p>
+                        {{ form.errors }}
+                    </div>
+                    {% endif %}
+
+                    <div>
+                        <label class="block text-xs font-medium text-muted-foreground mb-1">Full Name</label>
+                        {{ form.full_name }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-muted-foreground mb-1">Email Address</label>
+                        {{ form.email }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-muted-foreground mb-1">Mobile Number</label>
+                        {{ form.mobile_number }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-muted-foreground mb-1">UPI Transaction ID / 12-digit UTR No. <span class="text-muted-foreground/60">(Optional)</span></label>
+                        {{ form.upi_transaction_id }}
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary text-black font-bold h-12 rounded-xl text-base flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition mt-6">
+                        Verify & Confirm Enrollment
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Styling tweak to ensure Django form widgets adopt Tailwind classes properly -->
+<style>
+    input[type="text"], input[type="email"] {
+        width: 100%;
+        background-color: #090d16;
+        border: 1px solid #1e293b;
+        color: #f8fafc;
+        padding: 0.65rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.875rem;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    input[type="text"]:focus, input[type="email"]:focus {
+        border-color: #00ff88;
+    }
+</style>
+{% endblock %}

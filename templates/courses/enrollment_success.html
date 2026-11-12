@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Enrollment Submitted - AspireFounder{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-20 text-center">
+    <div class="bg-card border border-border/80 shadow-2xl rounded-2xl p-8 sm:p-12 space-y-6">
+        
+        <!-- Success Icon -->
+        <div class="w-20 h-20 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto text-3xl font-bold shadow-lg shadow-primary/10">
+            ✓
+        </div>
+
+        <div class="space-y-2">
+            <h1 class="text-3xl font-extrabold font-headline text-white">Enrollment Submitted Successfully!</h1>
+            <p class="text-muted-foreground text-sm">Thank you for registering with AspireFounder.</p>
+        </div>
+
+        <!-- Notification Message Box -->
+        <div class="bg-background/60 border border-border p-5 rounded-xl text-left space-y-3 text-sm text-slate-300">
+            <p class="text-primary font-semibold flex items-center gap-2">
+                <span>ℹ</span> What happens next?
+            </p>
+            <p>You will get an update soon once your payment is approved by our admin team.</p>
+            <p class="text-xs text-muted-foreground pt-2 border-t border-border/40">
+                If you need any immediate assistance, please check our contact number in the <a href="/about/" class="text-primary underline hover:text-primary/80">About section</a>.
+            </p>
+        </div>
+
+        <!-- Action Button -->
+        <div class="pt-4">
+            <a href="/" class="inline-flex items-center justify-center bg-primary text-black font-bold h-12 px-8 rounded-xl text-base shadow-lg shadow-primary/20 hover:bg-primary/90 transition">
+                Go Back to Home Page
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

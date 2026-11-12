@@ -32,7 +32,12 @@
             <header class="sticky top-0 z-50 w-full transition-all duration-300 bg-background/90 backdrop-blur-md border-b border-border/40">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                     <div class="flex items-center space-x-2">
-                        <a class="flex items-center gap-1 group select-none" href="/">
+                        <a class="flex items-center gap-2 group select-none" href="/">
+                            {% if about_content.logo %}
+                            <!-- Dynamic Logo from Admin Panel -->
+                            <img src="{{ about_content.logo.url }}" alt="AspireFounder Logo" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                            {% else %}
+                            <!-- Fallback Logo SVG -->
                             <svg viewBox="0 0 100 100" class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-105" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="gold-swoosh" x1="10" y1="70" x2="90" y2="20" gradientUnits="userSpaceOnUse">
@@ -53,6 +58,7 @@
                                 </span>
                                 <span class="font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.3em] text-muted-foreground uppercase leading-none mt-1 pl-[2px]">FOUNDER</span>
                             </div>
+                            {% endif %}
                         </a>
                     </div>
                     
@@ -63,11 +69,10 @@
                         <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/about/">About</a>
                     </nav>
 
-                    <!-- Exact Navbar Button Styles from Screenshot -->
                     <div class="flex items-center space-x-2 sm:space-x-3">
                         <a href="/admin" class="hidden sm:inline-block bg-accent hover:bg-accent/80 text-foreground text-xs font-semibold px-3 py-2 rounded-lg border border-border transition">Admin</a>
-                        <a href="/login" class="border border-primary text-primary hover:bg-primary/10 font-bold text-xs sm:text-sm px-5 py-2 rounded-full transition">Login</a>
-                        <a href="/login" class="bg-primary text-primary-foreground font-bold text-xs sm:text-sm px-5 py-2 rounded-full shadow-lg hover:bg-primary/90 transition">Sign Up</a>
+                        <!-- <a href="/login" class="border border-primary text-primary hover:bg-primary/10 font-bold text-xs sm:text-sm px-5 py-2 rounded-full transition">Login</a>
+                        <a href="/login" class="bg-primary text-primary-foreground font-bold text-xs sm:text-sm px-5 py-2 rounded-full shadow-lg hover:bg-primary/90 transition">Sign Up</a> -->
                         
                         <button id="menu-btn" class="md:hidden p-2 rounded-lg bg-accent/50 text-foreground focus:outline-none" aria-label="Toggle Menu">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
@@ -85,105 +90,170 @@
 
             <main class="flex-1">
                 
-                <!-- 1. HERO SECTION -->
-                <section class="hero relative min-h-[85vh] flex items-center py-12 sm:py-20" id="home">
+                <!-- 1. VIBRANT FULL-WIDTH HERO SECTION -->
+                <section class="hero relative min-h-[85vh] flex items-center py-20 sm:py-28 overflow-hidden bg-background" id="home">
+                    
+                    <!-- Bright, Visible Background Image with Soft Overlays -->
+                    <div class="absolute inset-0 pointer-events-none z-0">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=1920" alt="Healthcare Background" class="w-full h-full object-cover object-center opacity-70 scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent"></div>
+                        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b10_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+                    </div>
+
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-                        <div class="hero-content grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                            <div class="hero-text text-center lg:text-left">
-                                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-headline mb-5 leading-tight tracking-tight">
-                                    <span class="text-white">Decode your <span class="text-primary">future</span>.</span><br/>
-                                    <span class="text-white">{{ hero.title_line_2|default:"Learn, Certify, Get Hired." }}</span>
-                                </h1>
-                                <p class="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
-                                    {{ hero.subtitle }}
-                                </p>
-                                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                    <a class="bg-primary text-primary-foreground font-bold h-12 px-8 rounded-xl text-base flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition" href="#courses">Start Learning Now</a>
-                                    <a target="_blank" class="border border-primary bg-transparent text-primary hover:bg-primary/10 h-12 px-8 rounded-xl text-base flex items-center justify-center transition" href="https://www.youtube.com/@aspirefounder">Watch Demo</a>
+                        <div class="hero-content grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                            
+                            <!-- Left Text Column -->
+                            <div class="hero-text {% if hero_card.should_display %}lg:col-span-7{% else %}lg:col-span-12 text-center lg:text-left max-w-3xl{% endif %}">
+                                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-6 shadow-sm">
+                                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                                    AAPC Authorized Institute & AHIMA Reseller
                                 </div>
                                 
-                                <div class="hero-stats grid grid-cols-3 gap-4 sm:gap-8 mt-12 pt-8 border-t border-border/40 max-w-lg mx-auto lg:mx-0">
+                                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-headline mb-6 leading-tight tracking-tight">
+                                    <span class="text-foreground">Decode your <span class="text-primary">future</span>.</span><br/>
+                                    <span class="text-foreground/90">{{ hero.title_line_2|default:"Learn, Certify, Get Hired." }}</span>
+                                </h1>
+                                
+                                <p class="text-base sm:text-lg text-muted-foreground mb-8 max-w-2xl {% if not hero_card.should_display %}mx-auto lg:mx-0{% endif %} leading-relaxed font-medium">
+                                    {{ hero.subtitle }}
+                                </p>
+                                
+                                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                                    <a class="bg-primary text-primary-foreground font-bold h-12 px-8 rounded-xl text-base flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition transform hover:-translate-y-0.5" href="#courses">
+                                        Start your certification journey →
+                                    </a>
+                                    <a target="_blank" class="border border-border bg-card/60 hover:bg-card text-foreground hover:text-primary h-12 px-8 rounded-xl text-base flex items-center justify-center transition backdrop-blur-md" href="https://www.youtube.com/@aspirefounder">
+                                        Watch Demo
+                                    </a>
+                                </div>
+                                
+                                <!-- Stats Grid -->
+                                <div class="hero-stats grid grid-cols-3 gap-4 sm:gap-8 mt-12 pt-8 border-t border-border/60 max-w-lg {% if not hero_card.should_display %}mx-auto lg:mx-0{% endif %}">
                                     <div class="text-center lg:text-left">
-                                        <div class="text-2xl sm:text-3xl font-bold text-primary">{{ hero.students_count }}</div>
-                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1">Students</div>
+                                        <div class="text-2xl sm:text-3xl font-extrabold text-primary font-headline">{{ hero.students_count }}</div>
+                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1 font-medium">Students Enrolled</div>
                                     </div>
                                     <div class="text-center lg:text-left">
-                                        <div class="text-2xl sm:text-3xl font-bold text-primary">{{ hero.placement_rate }}</div>
-                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1">Placement Rate</div>
+                                        <div class="text-2xl sm:text-3xl font-extrabold text-primary font-headline">{{ hero.placement_rate }}</div>
+                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1 font-medium">Placement Rate</div>
                                     </div>
                                     <div class="text-center lg:text-left">
-                                        <div class="text-2xl sm:text-3xl font-bold text-primary">{{ hero.content_hours }}</div>
-                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1">Hours Content</div>
+                                        <div class="text-2xl sm:text-3xl font-extrabold text-primary font-headline">{{ hero.content_hours }}</div>
+                                        <div class="text-muted-foreground text-xs sm:text-sm mt-1 font-medium">Hours Content</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="hero-visual flex justify-center items-center w-full">
-                                <div class="bg-card border border-border/80 shadow-2xl rounded-2xl w-full max-w-md p-6 sm:p-8 relative overflow-hidden">
-                                    <h3 class="text-primary font-bold text-lg sm:text-xl mb-4 font-headline mt-2">{{ hero_card.title|default:"Medical Coding Foundation Program" }}</h3>
-                                    <ul class="space-y-2.5 mb-6 text-muted-foreground text-xs sm:text-sm">
-                                        <li class="flex items-center gap-2">✓ Medical Terminology & Human Anatomy</li>
-                                        <li class="flex items-center gap-2">✓ Introduction to ICD-10-CM</li>
-                                        <li class="flex items-center gap-2">✓ Basics of CPT and HCPCS</li>
-                                        <li class="flex items-center gap-2">✓ Overview of US Healthcare & RCM</li>
-                                        <li class="flex items-center gap-2">✓ HIPAA, Compliance & Claim Lifecycle</li>
-                                    </ul>
-                                    <div class="space-y-1 pt-4 border-t border-border/50">
-                                        <div class="text-2xl sm:text-3xl font-bold text-primary font-headline">
-                                            ₹{{ hero_card.price|default:"12,999" }} <span class="text-xs sm:text-sm text-muted-foreground line-through ml-2">₹{{ hero_card.original_price|default:"30,000" }}</span>
-                                        </div>
-                                        <p class="text-xs text-muted-foreground">+ GST</p>
+                            <!-- Right Column: Featured Course Card (Only renders when active) -->
+                            {% if hero_card.should_display %}
+                            <div class="hero-visual lg:col-span-5 flex justify-center items-center w-full mt-8 lg:mt-0">
+                                <div class="bg-card/90 backdrop-blur-2xl border border-border/80 shadow-2xl rounded-2xl w-full max-w-md p-6 sm:p-8 relative overflow-hidden group hover:border-primary/50 transition-all duration-300">
+                                    <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+
+                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wider mb-3">
+                                        Featured Program
                                     </div>
-                                    <div class="mt-5">
-                                        <a href="{{ hero_card.button_url|default:'/login' }}" class="bg-primary text-primary-foreground font-bold h-12 rounded-xl text-base w-full flex items-center justify-center shadow-md hover:bg-primary/90 transition">{{ hero_card.button_text|default:"Enroll Now" }}</a>
+
+                                    <h3 class="text-foreground font-bold text-xl sm:text-2xl mb-4 font-headline">{{ hero_card.title }}</h3>
+                                    
+                                    <ul class="space-y-3 mb-6 text-muted-foreground text-xs sm:text-sm">
+                                        {% for point in hero_card.learning_points %}
+                                        <li class="flex items-center gap-2.5">
+                                            <span class="flex-shrink-0 w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold">✓</span>
+                                            {{ point.point_text }}
+                                        </li>
+                                        {% empty %}
+                                        <li class="text-muted-foreground italic">Comprehensive curriculum tailored for industry success.</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <div class="space-y-1 pt-4 border-t border-border/60">
+                                        <div class="text-2xl sm:text-3xl font-extrabold text-primary font-headline flex items-baseline gap-2">
+                                            ₹{{ hero_card.price }} 
+                                            {% if hero_card.original_price %}
+                                            <span class="text-xs sm:text-sm text-muted-foreground line-through font-normal">₹{{ hero_card.original_price }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="text-[11px] text-muted-foreground font-medium">+ GST applicable</p>
+                                    </div>
+                                    
+                                    <div class="mt-6 grid grid-cols-2 gap-3">
+                                        <a href="{% url 'course_detail' hero_card.course_slug %}" class="inline-flex items-center justify-center text-xs sm:text-sm font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 h-12 rounded-xl px-3 transition border border-border">
+                                            Course Detail
+                                        </a>
+                                        <a href="{% url 'checkout' hero_card.course_slug %}" class="bg-primary text-black font-bold h-12 rounded-xl text-xs sm:text-sm flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition transform hover:scale-[1.02]">
+                                            {{ hero_card.button_text|default:"Enroll Now" }}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
+
                         </div>
                     </div>
                 </section>
 
-                <!-- 2. WHY LEARN WITH US -->
+                <!-- 2. WHY LEARN WITH US (Centered & Image-Enabled) -->
                 <section class="why-us py-16 sm:py-24 bg-card/30 border-y border-border/40" id="features">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="section-header text-center mb-12 sm:mb-16">
                             <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-4">Why Learn With Us?</h2>
                             <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">Structured, practical, and career-focused training designed for your success.</p>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                        
+                        <!-- Grid aligned nicely with auto-centering cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center max-w-6xl mx-auto">
                             {% for feature in features %}
-                            <div class="rounded-xl border bg-card/50 border-border/50 text-center p-6 sm:p-8 hover:-translate-y-1 transition-transform duration-300">
-                                <div class="bg-primary/10 text-primary w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-xl sm:text-2xl">{{ feature.icon_emoji }}</div>
-                                <h3 class="text-lg sm:text-xl font-bold font-headline mb-3">{{ feature.title }}</h3>
+                            <div class="rounded-2xl border bg-card/50 border-border/50 text-center p-8 hover:-translate-y-1 transition-transform duration-300 flex flex-col items-center justify-center">
+                                
+                                <!-- Icon Image / Fallback Container -->
+                                <div class="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 overflow-hidden shadow-sm">
+                                    {% if feature.icon_image %}
+                                    <img src="{{ feature.icon_image.url }}" alt="{{ feature.title }}" class="w-10 h-10 object-contain">
+                                    {% else %}
+                                    <div class="text-primary text-2xl font-bold">✓</div>
+                                    {% endif %}
+                                </div>
+
+                                <h3 class="text-lg sm:text-xl font-bold font-headline mb-3 text-white">{{ feature.title }}</h3>
                                 <p class="text-muted-foreground text-xs sm:text-sm leading-relaxed">{{ feature.description }}</p>
                             </div>
                             {% empty %}
-                            <p class="text-center text-muted-foreground col-span-4">No features added yet.</p>
+                            <p class="text-center text-muted-foreground col-span-3">No features added yet.</p>
                             {% endfor %}
                         </div>
                     </div>
                 </section>
 
-                <!-- 3. GET FREE ACCESS TO PREMIUM RESOURCES -->
+                <!-- 3. GET FREE ACCESS TO PREMIUM RESOURCES (Centered & Clean Icons) -->
                 <section class="free-offerings py-16 sm:py-24 bg-background">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="section-header text-center mb-12 sm:mb-16">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <div class="section-header mb-12 sm:mb-16">
                             <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-4">Get Free Access to Premium Resources</h2>
                             <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">Sign up today and kickstart your medical coding journey with these valuable resources, absolutely free.</p>
                         </div>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                        
+                        <!-- Perfectly Centered Flex/Grid Container -->
+                        <div class="flex flex-wrap justify-center items-center gap-6 max-w-5xl mx-auto">
                             {% for res in resources %}
-                            <div class="rounded-xl border text-card-foreground shadow-sm offering-card text-center p-6 bg-card/50 border-border/50 hover:-translate-y-1 transition-transform duration-300 flex flex-col items-center justify-center">
-                                <div class="offering-icon bg-primary/10 text-primary w-14 h-14 rounded-full flex items-center justify-center mb-4">⭐</div>
-                                <h3 class="text-sm sm:text-base font-semibold">{{ res.title }}</h3>
+                            <div class="rounded-2xl border text-card-foreground shadow-sm offering-card text-center p-6 bg-card/50 border-border/50 hover:-translate-y-1 transition-transform duration-300 flex flex-col items-center justify-center w-[260px] h-[160px]">
+                                
+                                <!-- Dropdown Icon from Admin Panel (No default asterisks) -->
+                                <div class="offering-icon bg-primary/10 text-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-3 text-2xl border border-primary/20 shadow-sm">
+                                    {{ res.icon }}
+                                </div>
+                                
+                                <h3 class="text-sm sm:text-base font-semibold text-white">{{ res.title }}</h3>
                             </div>
                             {% empty %}
-                            <p class="text-center text-muted-foreground col-span-4">No resources added yet.</p>
+                            <p class="text-center text-muted-foreground w-full">No resources added yet.</p>
                             {% endfor %}
                         </div>
-                        <div class="text-center mt-12">
+
+                        <!-- <div class="text-center mt-12">
                             <a class="bg-primary text-primary-foreground font-bold h-12 px-8 rounded-xl text-base inline-flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition" href="/login">Sign Up For Free</a>
-                        </div>
+                        </div> -->
                     </div>
                 </section>
 
@@ -199,7 +269,6 @@
                             {% for course in courses %}
                             <div class="border text-card-foreground shadow-sm h-full flex flex-col overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 border-border/50 bg-[#0d1322] rounded-2xl">
                                 
-                                <!-- Clickable Header & Top Badges -->
                                 <div class="p-5 relative bg-[#111827]/70 flex-grow">
                                     <div class="flex flex-wrap items-center gap-2 mb-3">
                                         <div class="inline-flex items-center rounded-full px-3 py-1 text-[11px] sm:text-xs font-bold text-black bg-[#00ff88]">
@@ -218,7 +287,6 @@
                                     </a>
                                 </div>
 
-                                <!-- Instructor & Ratings Section -->
                                 <div class="p-5 space-y-4">
                                     <div class="flex items-center gap-2 text-sm text-slate-300">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg>
@@ -236,9 +304,8 @@
                                     </div>
                                 </div>
 
-                                <!-- Card Footer (Price & Action Button with Hover Glow/Zoom & Popup Toast) -->
                                 <div class="p-5 flex flex-col items-start gap-4 border-t border-border/40 bg-[#111827]/40 mt-auto">
-                                    <div class="w-full flex justify-between items-center">
+                                    <div class="w-full flex justify-between items-center mb-1">
                                         <div class="flex flex-col">
                                             <div class="flex items-baseline gap-2">
                                                 <p class="text-xl font-extrabold font-headline text-primary">₹{{ course.price }}</p>
@@ -246,16 +313,20 @@
                                             </div>
                                             <p class="text-[10px] text-muted-foreground mt-0.5">+ GST {% if course.exam_fees %}+ {{ course.exam_fees }}{% endif %}</p>
                                         </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-2 w-full">
+                                        <a href="{% url 'course_detail' course.slug %}" class="inline-flex items-center justify-center text-xs sm:text-sm font-semibold bg-accent text-foreground hover:bg-accent/80 h-10 rounded-xl px-3 transition border border-border">
+                                            Course Detail
+                                        </a>
                                         
                                         {% if "Notify" in course.button_text %}
-                                        <!-- Notify Me Button with popup trigger and hover zoom/glow -->
-                                        <button onclick="showNotifyToast('{{ course.title }}')" class="notify-btn inline-flex items-center justify-center text-xs sm:text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] bg-white text-slate-900 hover:bg-slate-100 h-10 rounded-xl px-5 shadow">
+                                        <button onclick="showNotifyToast('{{ course.title }}')" class="notify-btn inline-flex items-center justify-center text-xs sm:text-sm font-semibold bg-white text-slate-900 hover:bg-slate-100 h-10 rounded-xl px-3 shadow">
                                             {{ course.button_text }}
                                         </button>
                                         {% else %}
-                                        <!-- Enroll Now Button with hover zoom and neon glow -->
-                                        <a href="{{ course.button_url }}" class="inline-flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_25px_rgba(0,255,136,0.6)] bg-primary text-black hover:bg-primary/90 h-10 rounded-xl px-5 shadow-md shadow-primary/30">
-                                            {{ course.button_text }}
+                                        <a href="{% url 'checkout' course.slug %}" class="inline-flex items-center justify-center text-xs sm:text-sm font-bold bg-primary text-black hover:bg-primary/90 h-10 rounded-xl px-3 shadow-md shadow-primary/30 transition">
+                                            Enroll Now
                                         </a>
                                         {% endif %}
                                     </div>
@@ -274,7 +345,6 @@
                 <!-- Toast Notification Popup Container -->
                 <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col space-y-2 pointer-events-none"></div>
 
-                <!-- Toast Notification Script -->
                 <script>
                     function showNotifyToast(courseName) {
                         const container = document.getElementById('toast-container');
@@ -289,12 +359,10 @@
                         
                         container.appendChild(toast);
                         
-                        // Fade in & Slide up
                         setTimeout(() => {
                             toast.classList.remove('translate-y-5', 'opacity-0');
                         }, 50);
                         
-                        // Remove after 4 seconds
                         setTimeout(() => {
                             toast.classList.add('translate-y-5', 'opacity-0');
                             setTimeout(() => {
@@ -304,28 +372,23 @@
                     }
                 </script>
 
-                <!-- 5. SUCCESS STORIES (Centered Header & Outer Edge Navigation Arrows) -->
+                <!-- 5. SUCCESS STORIES -->
                 <section class="testimonials py-16 sm:py-24 bg-background overflow-hidden" id="testimonials">
-                    <!-- Centered Header -->
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 text-center">
                         <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-3">Success Stories</h2>
                         <p class="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">Hear from students who transformed their careers with us</p>
                     </div>
                     
-                    <!-- Carousel Container with Edge Arrows -->
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                         
-                        <!-- Left Arrow (Absolute on Far Left Edge) -->
                         <button onclick="scrollTestimonials('left')" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 sm:-ml-5 z-20 p-3 rounded-full border border-border/80 bg-card/90 text-foreground hover:bg-primary hover:text-black hover:border-primary shadow-xl transition-all duration-300 focus:outline-none hidden sm:flex items-center justify-center" aria-label="Scroll Left">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                         </button>
 
-                        <!-- Scrollable Horizontal Container -->
                         <div id="testimonial-container" class="flex overflow-x-auto space-x-6 pb-6 pt-2 px-2 no-scrollbar snap-x snap-mandatory scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
                             {% for story in stories %}
                             <div class="border text-card-foreground shadow-sm testimonial-card p-8 bg-card/50 border-border/50 relative rounded-2xl flex flex-col flex-shrink-0 w-[350px] sm:w-[400px] snap-start">
                                 
-                                <!-- Card Header: Avatar, Name, and Dynamic Stars -->
                                 <div class="flex justify-between items-start mb-6">
                                     <div class="flex items-center gap-4">
                                         <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 bg-accent flex-shrink-0">
@@ -337,7 +400,6 @@
                                         </div>
                                         <div>
                                             <h4 class="font-bold font-headline text-lg text-white">{{ story.student_name }}</h4>
-                                            <!-- Dynamic Star Rating Loop -->
                                             <div class="flex items-center gap-1 mt-1">
                                                 {% for i in "12345" %}
                                                     {% if forloop.counter <= story.rating_stars %}
@@ -356,12 +418,10 @@
                                     <p class="text-6xl font-serif text-primary opacity-10 leading-none select-none">“</p>
                                 </div>
                                 
-                                <!-- Quote Content -->
                                 <div class="p-0 z-10 relative flex-grow mb-6">
                                     <p class="testimonial-text text-muted-foreground italic text-sm sm:text-base">"{{ story.quote }}"</p>
                                 </div>
                                 
-                                <!-- Card Footer: Designation & Location -->
                                 <div class="testimonial-footer pt-6 border-t border-border/50 mt-auto">
                                     <p class="text-sm font-semibold text-foreground mb-1">{{ story.designation }}</p>
                                     <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -381,7 +441,6 @@
                             {% endfor %}
                         </div>
 
-                        <!-- Right Arrow (Absolute on Far Right Edge) -->
                         <button onclick="scrollTestimonials('right')" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 sm:-mr-5 z-20 p-3 rounded-full border border-border/80 bg-card/90 text-foreground hover:bg-primary hover:text-black hover:border-primary shadow-xl transition-all duration-300 focus:outline-none hidden sm:flex items-center justify-center" aria-label="Scroll Right">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                         </button>
@@ -389,11 +448,10 @@
                     </div>
                 </section>
 
-                <!-- JavaScript for Horizontal Scroll Buttons -->
                 <script>
                     function scrollTestimonials(direction) {
                         const container = document.getElementById('testimonial-container');
-                        const scrollAmount = 420; // Scroll width of one card + gap
+                        const scrollAmount = 420;
                         if (direction === 'left') {
                             container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
                         } else {
@@ -430,13 +488,17 @@
             <footer class="border-t border-border/50 bg-background">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-6 py-10 md:h-24 md:flex-row md:py-0 text-center md:text-left">
                     <div class="flex flex-col items-center gap-4 md:flex-row md:gap-6">
-                        <a class="flex items-center gap-1 group select-none" href="/">
+                        <a class="flex items-center gap-2 group select-none" href="/">
+                            {% if about_content.logo %}
+                            <img src="{{ about_content.logo.url }}" alt="AspireFounder Logo" class="h-8 w-auto object-contain">
+                            {% else %}
                             <svg viewBox="0 0 100 100" class="w-8 h-8 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M 16 82 L 38 18 L 49 18 L 29 82 Z" fill="currentColor" class="text-foreground"></path>
                                 <path d="M 44 18 L 56 18 L 82 82 L 70 82 L 53 40 Z" fill="currentColor" class="text-foreground"></path>
                                 <path d="M 6 62 C 24 58, 48 46, 76 25 C 48 43, 24 52, 6 54 Z" fill="url(#gold-swoosh)"></path>
                             </svg>
                             <span class="font-bold tracking-tight text-lg text-foreground ml-1">spireFOUNDER</span>
+                            {% endif %}
                         </a>
                         <div class="flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
                             <a class="hover:text-foreground transition" href="#">Terms and Conditions</a>
