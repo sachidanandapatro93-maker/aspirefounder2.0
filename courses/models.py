@@ -19,10 +19,18 @@ class HeroSection(SingletonModel):
     placement_rate = models.CharField(max_length=50, default="95%")
     content_hours = models.CharField(max_length=50, default="50+")
 
+    class Meta:
+        verbose_name = "Hero Section"
+        verbose_name_plural = "Hero Banner Management"
+
 class HeroFeaturedCard(models.Model):
     course = models.ForeignKey('Course', on_delete=models.SET_NULL, null=True, blank=True, help_text="Select a course to feature")
     is_active = models.BooleanField(default=True, help_text="Check to show this card on the homepage, uncheck to hide it completely")
     button_text = models.CharField(max_length=50, default="Enroll Now")
+
+    class Meta:
+        verbose_name = "Featured Card"
+        verbose_name_plural = "Featured Course Card"
 
     def save(self, *args, **kwargs):
         self.pk = 1  # Singleton enforcement
@@ -67,6 +75,8 @@ class Feature(models.Model):
     
     class Meta:
         ordering = ['order']
+        verbose_name = "Platform Feature"
+        verbose_name_plural = "Platform Features"
         
     def __str__(self):
         return self.title
@@ -89,6 +99,8 @@ class PremiumResource(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Premium Resource"
+        verbose_name_plural = "Premium Resources"
 
     def __str__(self):
         return self.title
@@ -123,6 +135,10 @@ class Course(models.Model):
         help_text="Format per line: Module Title | Lesson 1 (Time), Lesson 2 (Time)"
     )
 
+    class Meta:
+        verbose_name = "Training Course"
+        verbose_name_plural = "Training Courses"
+
     def __str__(self):
         return self.title
 
@@ -139,7 +155,7 @@ class CourseSlot(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='slots')
     slot_name = models.CharField(max_length=150, help_text="e.g., Batch 1 - Weekend / Weekday")
     start_date = models.DateField(help_text="Select batch start date")
-    end_date = models.DateField(null=True, blank=True, help_text="Select batch end date") # <-- Added null=True, blank=True
+    end_date = models.DateField(null=True, blank=True, help_text="Select batch end date")
     timing_info = models.CharField(
         max_length=50, 
         choices=TIME_SLOT_CHOICES, 
@@ -150,6 +166,8 @@ class CourseSlot(models.Model):
 
     class Meta:
         ordering = ['start_date']
+        verbose_name = "Batch Slot"
+        verbose_name_plural = "Batch Slots & Timing"
 
     def __str__(self):
         return f"{self.course.title} — {self.slot_name} ({self.timing_info})"
@@ -161,6 +179,8 @@ class CourseLearningPoint(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Learning Point"
+        verbose_name_plural = "Learning Points"
 
     def __str__(self):
         return self.point_text
@@ -173,6 +193,10 @@ class SuccessStory(models.Model):
     image = models.ImageField(upload_to='success_stories/', blank=True, null=True)
     rating_stars = models.IntegerField(default=5, help_text="Enter number of filled stars (1 to 5)")
 
+    class Meta:
+        verbose_name = "Success Story"
+        verbose_name_plural = "Student Success Stories"
+
     def __str__(self):
         return self.student_name
 
@@ -180,8 +204,12 @@ class FAQ(models.Model):
     question = models.CharField(max_length=250)
     answer = models.TextField()
     order = models.IntegerField(default=0)
+    
     class Meta:
         ordering = ['order']
+        verbose_name = "FAQ Item"
+        verbose_name_plural = "Frequently Asked Questions"
+
     def __str__(self):
         return self.question
 
@@ -208,22 +236,41 @@ class AboutPageContent(SingletonModel):
     button_text = models.CharField(max_length=50, default="Explore Our Courses")
     button_url = models.CharField(max_length=100, default="/#courses")
 
+    class Meta:
+        verbose_name = "About Page Content"
+        verbose_name_plural = "About Page Content"
+
     def __str__(self):
         return "About Page Content"
 
 class Enrollment(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments', null=True, blank=True)
+    course_title = models.CharField(max_length=200, blank=True)
     full_name = models.CharField(max_length=150)
     email = models.EmailField()
     mobile_number = models.CharField(max_length=15)
-    course_title = models.CharField(max_length=200)
+    
+    whatsapp_number = models.CharField(max_length=15, blank=True, null=True)
+    student_photo = models.ImageField(upload_to='student_photos/', blank=True, null=True)
+    id_proof = models.FileField(upload_to='id_proofs/', blank=True, null=True, help_text="Upload Aadhaar, Voter ID, or College ID")
+    payment_screenshot = models.ImageField(upload_to='payment_proofs/', blank=True, null=True)
+    
     amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=12999.00)
     upi_transaction_id = models.CharField(max_length=100, blank=True, null=True, help_text="12-digit UTR or UPI transaction reference number")
     
-    # --- Course Slot Relation Added ---
     assigned_slot = models.ForeignKey(CourseSlot, on_delete=models.SET_NULL, null=True, blank=True, related_name='enrolled_students')
     
     created_at = models.DateTimeField(auto_now_add=True)
     verified = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Student Enrollment"
+        verbose_name_plural = "Student Enrollments & Payments"
+
+    def save(self, *args, **kwargs):
+        if self.course and not self.course_title:
+            self.course_title = self.course.title
+        super().save(*args, **kwargs)
 
     def __str__(self):
         status = 'Verified' if self.verified else 'Pending'
@@ -252,6 +299,10 @@ class PaymentSetting(SingletonModel):
     bank_ifsc = models.CharField(max_length=20, default="HDFC0001234")
     bank_name = models.CharField(max_length=100, default="HDFC Bank")
     bank_logo = models.ImageField(upload_to='payments/banks/', blank=True, null=True, help_text="Upload bank logo image")
+
+    class Meta:
+        verbose_name = "Payment Gateway Setting"
+        verbose_name_plural = "Payment Gateways & QR"
 
     def __str__(self):
         return f"Payment Settings [Active: {self.get_active_method_display()}]"

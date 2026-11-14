@@ -75,9 +75,11 @@ def checkout_view(request, slug):
     course_price = str(course.price)
 
     if request.method == 'POST':
-        form = EnrollmentForm(request.POST)
+        # ---> CRITICAL FIX: Included request.FILES to handle student photos, ID proofs, and payment screenshots <---
+        form = EnrollmentForm(request.POST, request.FILES)
         if form.is_valid():
             enrollment = form.save(commit=False)
+            enrollment.course = course  # Assign the course foreign key relation
             enrollment.course_title = course_name
             clean_price = course_price.replace(',', '').strip()
             enrollment.amount_paid = float(clean_price) if clean_price else 12999.00

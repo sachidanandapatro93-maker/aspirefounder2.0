@@ -3,6 +3,7 @@ from django.contrib import admin
 from django import forms
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils.html import format_html
 from .models import (
     HeroSection, HeroFeaturedCard, Feature, PremiumResource, 
     Course, CourseSlot, CourseLearningPoint, SuccessStory, FAQ, AboutPageContent, 
@@ -74,6 +75,37 @@ class EnrollmentAdmin(admin.ModelAdmin):
     search_fields = ('full_name', 'email', 'mobile_number', 'upi_transaction_id', 'course_title')
     list_editable = ('verified', 'assigned_slot') # Allows assigning slots and verifying directly from the list view!
     actions = ['approve_and_notify_students']
+
+    # Readonly fields for visual photo and payment proof previews in admin change view
+    readonly_fields = ('student_photo_preview', 'payment_screenshot_preview', 'created_at')
+
+    # Grouping fields into clean sections resembling a professional member profile form
+    fieldsets = (
+        ("Course & Verification", {
+            'fields': ('course', 'course_title', 'assigned_slot', 'verified', 'amount_paid')
+        }),
+        ("Student Personal Information", {
+            'fields': ('full_name', 'email', 'mobile_number', 'whatsapp_number', 'student_photo', 'student_photo_preview')
+        }),
+        ("Uploaded Verification Documents", {
+            'fields': ('id_proof', 'payment_screenshot', 'payment_screenshot_preview')
+        }),
+        ("Payment & Metadata", {
+            'fields': ('upi_transaction_id', 'created_at')
+        }),
+    )
+
+    def student_photo_preview(self, obj):
+        if obj.student_photo:
+            return format_html('<img src="{}" style="max-height: 160px; border-radius: 10px; border: 2px solid #00ff88; object-fit: cover;" />', obj.student_photo.url)
+        return "No Student Photo Uploaded"
+    student_photo_preview.short_description = "Student Photo Preview"
+
+    def payment_screenshot_preview(self, obj):
+        if obj.payment_screenshot:
+            return format_html('<img src="{}" style="max-height: 220px; border-radius: 10px; border: 2px solid #00ff88; object-fit: contain;" />', obj.payment_screenshot.url)
+        return "No Payment Screenshot Uploaded"
+    payment_screenshot_preview.short_description = "Payment Screenshot Preview"
 
     def save_model(self, request, obj, form, change):
         send_email_flag = False

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ac8i5$(6ypjnssc=q4tfihh8%36tjhq&j-p=zo1*&d$^4qdbse'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ac8i5$(6ypjnssc=q4tfihh8%36tjhq&j-p=zo1*&d$^4qdbse')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -65,7 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # --- Add your custom context processor here ---
+                # --- Custom context processor ---
                 'courses.context_processors.site_branding',
             ],
         },
@@ -79,7 +81,8 @@ WSGI_APPLICATION = 'aspire_project.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
-        conn_max_age=600
+        conn_max_age=600,
+        conn_health_checks=True,
     )
 }
 
@@ -112,7 +115,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# ---> ADD THIS LINE SO DJANGO FINDS YOUR ROOT STATIC FOLDER <---
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -122,7 +124,7 @@ if DEBUG:
 else:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files configuration for uploads
+# Media files configuration for user uploads
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -132,50 +134,111 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sachidanandapatro93@gmail.com'          # Replace with your actual Gmail address
-EMAIL_HOST_PASSWORD = 'zutr ekcs xgzk rxal'   # Replace with your Google App Password
-DEFAULT_FROM_EMAIL = 'AspireFounder Support <sachidanandapatro93@gmail.com>'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'sachidanandapatro93@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'zutr ekcs xgzk rxal')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'AspireFounder Support <sachidanandapatro93@gmail.com>')
 
 
-from django.urls import reverse_lazy
-from django.utils.translation import gettext_lazy as _
+# Production Security Enhancements (Active when DEBUG = False)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
+
+# Unfold Admin Customization
 UNFOLD = {
     "SITE_TITLE": "AspireFounder Admin",
     "SITE_HEADER": "AspireFounder Control Center",
     "SITE_URL": "/",
-    
-    # Direct string path or dictionary format supported by Unfold for logo rendering
     "SITE_LOGO": "images/logo.jpeg", 
-    
-    # Optional: If you want to use a specific logo image for dark mode vs light mode:
-    # "SITE_LOGO": {
-    #     "light": "images/logo.jpeg",
-    #     "dark": "images/logo.jpeg",
-    # },
-
     "SIDEBAR": {
         "show_search": True,
-        "show_all_applications": True, 
+        "show_all_applications": False,
         "navigation": [
             {
-                "title": _("Core Management"),
+                "title": _("Overview"),
                 "items": [
                     {
                         "title": _("Dashboard"),
                         "icon": "dashboard",
                         "link": reverse_lazy("admin:index"),
                     },
+                ],
+            },
+            {
+                "title": _("Student Management"),
+                "items": [
                     {
-                        "title": _("Courses"),
+                        "title": _("Student Enrollments"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:courses_enrollment_changelist"),
+                    },
+                    {
+                        "title": _("Batch Slots"),
+                        "icon": "schedule",
+                        "link": reverse_lazy("admin:courses_courseslot_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Course Catalog"),
+                "items": [
+                    {
+                        "title": _("Training Courses"),
                         "icon": "school",
                         "link": reverse_lazy("admin:courses_course_changelist"),
                     },
                     {
-                        "title": _("Enrollments"),
-                        "icon": "group",
-                        "link": reverse_lazy("admin:courses_enrollment_changelist"),
+                        "title": _("Featured Course Card"),
+                        "icon": "star",
+                        "link": reverse_lazy("admin:courses_herofeaturedcard_changelist"),
                     },
+                    {
+                        "title": _("Premium Resources"),
+                        "icon": "folder",
+                        "link": reverse_lazy("admin:courses_premiumresource_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Website & Marketing"),
+                "items": [
+                    {
+                        "title": _("Hero Banner"),
+                        "icon": "view_carousel",
+                        "link": reverse_lazy("admin:courses_herosection_changelist"),
+                    },
+                    {
+                        "title": _("Platform Features"),
+                        "icon": "verified",
+                        "link": reverse_lazy("admin:courses_feature_changelist"),
+                    },
+                    {
+                        "title": _("Success Stories"),
+                        "icon": "emoji_events",
+                        "link": reverse_lazy("admin:courses_successstory_changelist"),
+                    },
+                    {
+                        "title": _("FAQs"),
+                        "icon": "help",
+                        "link": reverse_lazy("admin:courses_faq_changelist"),
+                    },
+                    {
+                        "title": _("About Page"),
+                        "icon": "info",
+                        "link": reverse_lazy("admin:courses_aboutpagecontent_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Configuration"),
+                "items": [
                     {
                         "title": _("Payment Settings"),
                         "icon": "payments",
@@ -185,30 +248,4 @@ UNFOLD = {
             },
         ],
     },
-    "STYLES": [
-        lambda request: """
-        <style>
-            /* Force all inputs, select dropdowns, and textareas to look crisp with distinct borders */
-            input[type="text"], input[type="date"], input[type="email"], input[type="number"], input[type="password"], select, textarea {
-                border: 1px solid #475569 !important;
-                background-color: #1e293b !important;
-                color: #f8fafc !important;
-                border-radius: 0.375rem !important;
-                padding: 0.5rem 0.75rem !important;
-            }
-            
-            /* Fix dropdown option lists so text is dark and readable when opened */
-            select option {
-                background-color: #ffffff !important;
-                color: #0f172a !important;
-                padding: 0.5rem !important;
-            }
-
-            input:focus, select:focus, textarea:focus {
-                border-color: #00ff88 !important;
-                box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.25) !important;
-            }
-        </style>
-        """,
-    ],
 }
