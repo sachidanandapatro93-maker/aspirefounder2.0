@@ -24,6 +24,29 @@
             }
         </script>
         <title>AspireFounder</title>
+        <style>
+            /* Continuous Infinite Marquee Animation for Success Stories */
+            @keyframes marquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+            .animate-marquee {
+                display: flex;
+                width: max-content;
+                animation: marquee 30s linear infinite;
+            }
+            .animate-marquee:hover {
+                animation-play-state: paused;
+            }
+            /* Hide scrollbars completely */
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        </style>
     </head>
     <body class="bg-background text-foreground font-sans antialiased overflow-x-hidden">
         <div class="flex flex-col min-h-screen">
@@ -71,8 +94,6 @@
 
                     <div class="flex items-center space-x-2 sm:space-x-3">
                         <a href="/admin" class="hidden sm:inline-block bg-accent hover:bg-accent/80 text-foreground text-xs font-semibold px-3 py-2 rounded-lg border border-border transition">Admin</a>
-                        <!-- <a href="/login" class="border border-primary text-primary hover:bg-primary/10 font-bold text-xs sm:text-sm px-5 py-2 rounded-full transition">Login</a>
-                        <a href="/login" class="bg-primary text-primary-foreground font-bold text-xs sm:text-sm px-5 py-2 rounded-full shadow-lg hover:bg-primary/90 transition">Sign Up</a> -->
                         
                         <button id="menu-btn" class="md:hidden p-2 rounded-lg bg-accent/50 text-foreground focus:outline-none" aria-label="Toggle Menu">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
@@ -93,7 +114,6 @@
                 <!-- 1. VIBRANT FULL-WIDTH HERO SECTION -->
                 <section class="hero relative min-h-[85vh] flex items-center py-20 sm:py-28 overflow-hidden bg-background" id="home">
                     
-                    <!-- Bright, Visible Background Image with Soft Overlays -->
                     <div class="absolute inset-0 pointer-events-none z-0">
                         <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=1920" alt="Healthcare Background" class="w-full h-full object-cover object-center opacity-70 scale-105">
                         <div class="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent"></div>
@@ -103,7 +123,6 @@
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
                         <div class="hero-content grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                             
-                            <!-- Left Text Column -->
                             <div class="hero-text {% if hero_card.should_display %}lg:col-span-7{% else %}lg:col-span-12 text-center lg:text-left max-w-3xl{% endif %}">
                                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-6 shadow-sm">
                                     <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
@@ -128,7 +147,6 @@
                                     </a>
                                 </div>
                                 
-                                <!-- Stats Grid -->
                                 <div class="hero-stats grid grid-cols-3 gap-4 sm:gap-8 mt-12 pt-8 border-t border-border/60 max-w-lg {% if not hero_card.should_display %}mx-auto lg:mx-0{% endif %}">
                                     <div class="text-center lg:text-left">
                                         <div class="text-2xl sm:text-3xl font-extrabold text-primary font-headline">{{ hero.students_count }}</div>
@@ -145,7 +163,6 @@
                                 </div>
                             </div>
 
-                            <!-- Right Column: Featured Course Card (Only renders when active) -->
                             {% if hero_card.should_display %}
                             <div class="hero-visual lg:col-span-5 flex justify-center items-center w-full mt-8 lg:mt-0">
                                 <div class="bg-card/90 backdrop-blur-2xl border border-border/80 shadow-2xl rounded-2xl w-full max-w-md p-6 sm:p-8 relative overflow-hidden group hover:border-primary/50 transition-all duration-300">
@@ -175,7 +192,14 @@
                                             <span class="text-xs sm:text-sm text-muted-foreground line-through font-normal">₹{{ hero_card.original_price }}</span>
                                             {% endif %}
                                         </div>
-                                        <p class="text-[11px] text-muted-foreground font-medium">+ GST applicable</p>
+                                        <!-- Conditional: Only display fee details if course.exam_fees is present -->
+                                        <p class="text-[11px] text-muted-foreground font-medium">
+                                            {% if hero_card.course.exam_fees %}
+                                                + GST + {{ hero_card.course.exam_fees }}
+                                            {% else %}
+                                                <!-- Hidden if no exam fees -->
+                                            {% endif %}
+                                        </p>
                                     </div>
                                     
                                     <div class="mt-6 grid grid-cols-2 gap-3">
@@ -194,7 +218,7 @@
                     </div>
                 </section>
 
-                <!-- 2. WHY LEARN WITH US (Centered & Image-Enabled) -->
+                <!-- 2. WHY LEARN WITH US -->
                 <section class="why-us py-16 sm:py-24 bg-card/30 border-y border-border/40" id="features">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="section-header text-center mb-12 sm:mb-16">
@@ -202,12 +226,10 @@
                             <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">Structured, practical, and career-focused training designed for your success.</p>
                         </div>
                         
-                        <!-- Grid aligned nicely with auto-centering cards -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center max-w-6xl mx-auto">
                             {% for feature in features %}
                             <div class="rounded-2xl border bg-card/50 border-border/50 text-center p-8 hover:-translate-y-1 transition-transform duration-300 flex flex-col items-center justify-center">
                                 
-                                <!-- Icon Image / Fallback Container -->
                                 <div class="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 overflow-hidden shadow-sm">
                                     {% if feature.icon_image %}
                                     <img src="{{ feature.icon_image.url }}" alt="{{ feature.title }}" class="w-10 h-10 object-contain">
@@ -226,7 +248,7 @@
                     </div>
                 </section>
 
-                <!-- 3. GET FREE ACCESS TO PREMIUM RESOURCES (Centered & Clean Icons) -->
+                <!-- 3. GET FREE ACCESS TO PREMIUM RESOURCES -->
                 <section class="free-offerings py-16 sm:py-24 bg-background">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <div class="section-header mb-12 sm:mb-16">
@@ -234,12 +256,10 @@
                             <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">Sign up today and kickstart your medical coding journey with these valuable resources, absolutely free.</p>
                         </div>
                         
-                        <!-- Perfectly Centered Flex/Grid Container -->
                         <div class="flex flex-wrap justify-center items-center gap-6 max-w-5xl mx-auto">
                             {% for res in resources %}
                             <div class="rounded-2xl border text-card-foreground shadow-sm offering-card text-center p-6 bg-card/50 border-border/50 hover:-translate-y-1 transition-transform duration-300 flex flex-col items-center justify-center w-[260px] h-[160px]">
                                 
-                                <!-- Dropdown Icon from Admin Panel (No default asterisks) -->
                                 <div class="offering-icon bg-primary/10 text-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-3 text-2xl border border-primary/20 shadow-sm">
                                     {{ res.icon }}
                                 </div>
@@ -250,10 +270,6 @@
                             <p class="text-center text-muted-foreground w-full">No resources added yet.</p>
                             {% endfor %}
                         </div>
-
-                        <!-- <div class="text-center mt-12">
-                            <a class="bg-primary text-primary-foreground font-bold h-12 px-8 rounded-xl text-base inline-flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition" href="/login">Sign Up For Free</a>
-                        </div> -->
                     </div>
                 </section>
 
@@ -311,7 +327,12 @@
                                                 <p class="text-xl font-extrabold font-headline text-primary">₹{{ course.price }}</p>
                                                 <p class="text-xs sm:text-sm text-muted-foreground line-through">₹{{ course.original_price }}</p>
                                             </div>
-                                            <p class="text-[10px] text-muted-foreground mt-0.5">+ GST {% if course.exam_fees %}+ {{ course.exam_fees }}{% endif %}</p>
+                                            <!-- Conditional logic: Show + GST + exam_fees if exam_fees exists, otherwise hide completely -->
+                                            {% if course.exam_fees %}
+                                            <p class="text-[10px] text-muted-foreground mt-0.5">
+                                                + GST + {{ course.exam_fees }}
+                                            </p>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     
@@ -372,23 +393,18 @@
                     }
                 </script>
 
-                <!-- 5. SUCCESS STORIES -->
+                <!-- 5. SUCCESS STORIES WITH CONTINUOUS AUTO-SCROLLING MARQUEE -->
                 <section class="testimonials py-16 sm:py-24 bg-background overflow-hidden" id="testimonials">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 text-center">
                         <h2 class="text-3xl sm:text-4xl font-bold font-headline mb-3">Success Stories</h2>
                         <p class="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">Hear from students who transformed their careers with us</p>
                     </div>
                     
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-                        
-                        <button onclick="scrollTestimonials('left')" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 sm:-ml-5 z-20 p-3 rounded-full border border-border/80 bg-card/90 text-foreground hover:bg-primary hover:text-black hover:border-primary shadow-xl transition-all duration-300 focus:outline-none hidden sm:flex items-center justify-center" aria-label="Scroll Left">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                        </button>
-
-                        <div id="testimonial-container" class="flex overflow-x-auto space-x-6 pb-6 pt-2 px-2 no-scrollbar snap-x snap-mandatory scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <div class="w-full overflow-hidden relative">
+                        <!-- Infinite Marquee Track (Duplicated content for seamless loop) -->
+                        <div class="animate-marquee flex space-x-6 py-2">
                             {% for story in stories %}
-                            <div class="border text-card-foreground shadow-sm testimonial-card p-8 bg-card/50 border-border/50 relative rounded-2xl flex flex-col flex-shrink-0 w-[350px] sm:w-[400px] snap-start">
-                                
+                            <div class="border text-card-foreground shadow-sm testimonial-card p-8 bg-card/50 border-border/50 relative rounded-2xl flex flex-col flex-shrink-0 w-[350px] sm:w-[400px]">
                                 <div class="flex justify-between items-start mb-6">
                                     <div class="flex items-center gap-4">
                                         <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 bg-accent flex-shrink-0">
@@ -417,11 +433,9 @@
                                     </div>
                                     <p class="text-6xl font-serif text-primary opacity-10 leading-none select-none">“</p>
                                 </div>
-                                
                                 <div class="p-0 z-10 relative flex-grow mb-6">
                                     <p class="testimonial-text text-muted-foreground italic text-sm sm:text-base">"{{ story.quote }}"</p>
                                 </div>
-                                
                                 <div class="testimonial-footer pt-6 border-t border-border/50 mt-auto">
                                     <p class="text-sm font-semibold text-foreground mb-1">{{ story.designation }}</p>
                                     <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -432,33 +446,58 @@
                                         <span>{{ story.location }}</span>
                                     </div>
                                 </div>
-
                             </div>
-                            {% empty %}
-                            <div class="w-full text-center py-12 text-muted-foreground">
-                                <p>No success stories found. Add them via the Admin Panel.</p>
+                            {% endfor %}
+                            
+                            <!-- Duplicate loop to achieve completely seamless infinite ticker effect -->
+                            {% for story in stories %}
+                            <div class="border text-card-foreground shadow-sm testimonial-card p-8 bg-card/50 border-border/50 relative rounded-2xl flex flex-col flex-shrink-0 w-[350px] sm:w-[400px]" aria-hidden="true">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 bg-accent flex-shrink-0">
+                                            {% if story.image %}
+                                            <img alt="{{ story.student_name }}" class="object-cover w-full h-full" src="{{ story.image.url }}">
+                                            {% else %}
+                                            <img alt="{{ story.student_name }}" class="object-cover w-full h-full" src="https://picsum.photos/seed/{{ story.student_name|slugify }}/80/80">
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold font-headline text-lg text-white">{{ story.student_name }}</h4>
+                                            <div class="flex items-center gap-1 mt-1">
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= story.rating_stars %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-3.5 h-3.5 text-primary">
+                                                        <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
+                                                    </svg>
+                                                    {% else %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-3.5 h-3.5 text-slate-700">
+                                                        <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
+                                                    </svg>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-6xl font-serif text-primary opacity-10 leading-none select-none">“</p>
+                                </div>
+                                <div class="p-0 z-10 relative flex-grow mb-6">
+                                    <p class="testimonial-text text-muted-foreground italic text-sm sm:text-base">"{{ story.quote }}"</p>
+                                </div>
+                                <div class="testimonial-footer pt-6 border-t border-border/50 mt-auto">
+                                    <p class="text-sm font-semibold text-foreground mb-1">{{ story.designation }}</p>
+                                    <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3 text-primary">
+                                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        <span>{{ story.location }}</span>
+                                    </div>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
-
-                        <button onclick="scrollTestimonials('right')" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 sm:-mr-5 z-20 p-3 rounded-full border border-border/80 bg-card/90 text-foreground hover:bg-primary hover:text-black hover:border-primary shadow-xl transition-all duration-300 focus:outline-none hidden sm:flex items-center justify-center" aria-label="Scroll Right">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                        </button>
-
                     </div>
                 </section>
-
-                <script>
-                    function scrollTestimonials(direction) {
-                        const container = document.getElementById('testimonial-container');
-                        const scrollAmount = 420;
-                        if (direction === 'left') {
-                            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                        } else {
-                            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                        }
-                    }
-                </script>
 
                 <!-- 6. FAQ SECTION -->
                 <section class="faq py-16 sm:py-24 bg-card/30 border-y border-border/40" id="faq">
@@ -469,7 +508,8 @@
                         </div>
                         <div class="space-y-4">
                             {% for faq in faqs %}
-                            <details class="border-b border-border/60 pb-4 group">
+                            <!-- Added 'faq-item' class and conditional 'hidden' class for items after the 5th one -->
+                            <details class="faq-item border-b border-border/60 pb-4 group {% if forloop.counter > 5 %}hidden{% endif %}">
                                 <summary class="flex justify-between items-center font-medium cursor-pointer text-base sm:text-lg text-foreground py-2">
                                     {{ faq.question }}
                                     <span class="transition-transform group-open:rotate-180 ml-2">⌄</span>
@@ -480,8 +520,49 @@
                             <p class="text-center text-muted-foreground">No FAQs added yet.</p>
                             {% endfor %}
                         </div>
+
+                        <!-- Show More / Show Less Toggle Button -->
+                        {% if faqs|length > 5 %}
+                        <div class="text-center mt-10">
+                            <button id="toggle-faq-btn" onclick="toggleFaqs()" class="inline-flex items-center gap-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border text-sm font-semibold px-6 py-3 rounded-xl transition shadow-sm">
+                                <span id="faq-btn-text">Show More FAQs</span>
+                                <svg id="faq-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                        </div>
+                        {% endif %}
                     </div>
                 </section>
+
+                <script>
+                    function toggleFaqs() {
+                        const hiddenFaqs = document.querySelectorAll('.faq-item.hidden');
+                        const allFaqs = document.querySelectorAll('.faq-item');
+                        const btnText = document.getElementById('faq-btn-text');
+                        const btnIcon = document.getElementById('faq-btn-icon');
+                        
+                        // Check if we are currently showing or hiding
+                        const isShowingMore = hiddenFaqs.length > 0;
+
+                        if (isShowingMore) {
+                            // Reveal all hidden FAQs
+                            allFaqs.forEach(item => item.classList.remove('hidden'));
+                            btnText.textContent = "Show Less";
+                            btnIcon.style.transform = "rotate(180deg)";
+                        } else {
+                            // Collapse back to top 5 (hide everything after index 4)
+                            allFaqs.forEach((item, index) => {
+                                if (index >= 5) {
+                                    item.classList.add('hidden');
+                                }
+                            });
+                            btnText.textContent = "Show More FAQs";
+                            btnIcon.style.transform = "rotate(0deg)";
+                            
+                            // Scroll slightly back up to FAQ header for clean user experience
+                            document.getElementById('faq').scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                </script>
             </main>
 
             <!-- Footer -->
